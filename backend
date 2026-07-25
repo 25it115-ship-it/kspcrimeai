@@ -1,0 +1,42 @@
+fastapi==0.111.0
+uvicorn[standard]==0.30.1
+sqlalchemy==2.0.30
+psycopg2-binary==2.9.9
+alembic==1.13.1
+pydantic==2.7.1
+pydantic-settings==2.2.1
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+python-multipart==0.0.9
+python-dotenv==1.0.1
+anthropic==0.28.0
+sentence-transformers==2.7.0
+faiss-cpu==1.8.0
+chromadb==0.5.0
+numpy==1.26.4
+pypdf==4.2.0
+sqlparse==0.5.0# --- Database ---
+DATABASE_URL=postgresql://ksp_admin:ksp_secure_pass@postgres:5432/ksp_crime_db
+
+# --- Auth ---
+JWT_SECRET_KEY=change_this_to_a_random_64_char_secret
+JWT_ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=60
+REFRESH_TOKEN_EXPIRE_DAYS=7
+
+# --- Field-level encryption (Fernet key, generate with cryptography.fernet.Fernet.generate_key()) ---
+FIELD_ENCRYPTION_KEY=Uk1abkxjZmxLcGNJRmQ4d2VaX0F6SnJvVnJZQ2ZfMk09PT0=
+
+# --- Anthropic / Claude ---
+ANTHROPIC_API_KEY=your_anthropic_api_key_here
+CLAUDE_MODEL=claude-sonnet-4-6
+
+# --- Vector store ---
+VECTOR_DB_DIR=./vector_store
+EMBEDDING_MODEL=all-MiniLM-L6-v2
+
+# --- App ---
+APP_ENV=development
+CORS_ORIGINS=http://localhost:3000
+
+cryptography==42.0.7
