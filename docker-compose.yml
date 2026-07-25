@@ -1,0 +1,53 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: ksp_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ksp_admin
+      POSTGRES_PASSWORD: ksp_secure_pass
+      POSTGRES_DB: ksp_crime_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - ksp_pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ksp_admin -d ksp_crime_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build: ./backend
+    container_name: ksp_backend
+    restart: unless-stopped
+    env_file:
+      - ./backend/.env
+    environment:
+      DATABASE_URL: postgresql://ksp_admin:ksp_secure_pass@postgres:5432/ksp_crime_db
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+    volumes:
+      - ksp_uploads:/app/uploads
+      - ksp_vectorstore:/app/vector_store
+
+  frontend:
+    build: ./frontend
+    container_name: ksp_frontend
+    restart: unless-stopped
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:8000
+    depends_on:
+      - backend
+    ports:
+      - "3000:3000"
+
+volumes:
+  ksp_pg_data:
+  ksp_uploads:
+  ksp_vectorstore:
